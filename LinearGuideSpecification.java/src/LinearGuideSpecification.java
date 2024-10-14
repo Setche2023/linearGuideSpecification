@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 class LinearGuideSpecification {
     String company;
@@ -21,73 +22,80 @@ class LinearGuideSpecification {
 public LinearGuideSpecification() {
     Scanner scanner = new Scanner(System.in);
 //- 
-    System.out.println("Enter your company name:");
-    this.company = scanner.nextLine();
+    this.company = getStringInput(scanner, "Enter the company name:");
+    this.address = getStringInput(scanner, "Enter the address:");
+    this.department = getStringInput(scanner, "Enter the department:");
+    this.project = getStringInput(scanner, "Enter the project:");
 
-    System.out.println("Enter your address:");
-    this.address = scanner.nextLine();
+    this.fx = getPositiveDoubleInput(scanner, "Enter the force Fx (in Newtons):");   
+    this.fy = getPositiveDoubleInput(scanner, "Enter the force Fy (in Newtons):");
+    this.fz = getPositiveDoubleInput(scanner, "Enter the force Fz (in Newtons):");
 
-    System.out.println("Enter your department:");
-    this.department = scanner.nextLine();
+    this.mx = getPositiveDoubleInput(scanner, "Enter the moment Mx (in Newton-meters):");
+    this.my = getPositiveDoubleInput(scanner, "Enter the moment My (in Newton-meters):");
+    this.mz = getPositiveDoubleInput(scanner, "Enter the moment Mz (in Newton-meters):");
 
-    System.out.println("Enter your project name:");
-    this.project = scanner.nextLine();
+    this.configuration = getStringInput(scanner, "Enter the configuration (e.g., 'Kassette + Doppelschiene'):");
+    this.numberOfCarriages = getPositiveIntInput(scanner, "Enter the number of carriages:");
+    this.railLength = getPositiveDoubleInput(scanner, "Enter the rail length (in millimeters):");
+    this.speed = getPositiveDoubleInput(scanner, "Enter the speed (in meters per second):");
+    this.acceleration = getPositiveDoubleInput(scanner, "Enter the acceleration (in meters per second squared):");
+    this.desiredLifetime = getPositiveDoubleInput(scanner, "Enter the desired lifetime (kms):");
 
-    System.out.println("Enter the force (N) on the X-axis (Fx):");
-    this.fx = scanner.nextDouble();
-
-    System.out.println("Enter the force (N) on the Y-axis (Fy):");
-    this.fy = scanner.nextDouble();
-
-    System.out.println("Enter the force (N) on the Z-axis (Fz):");
-    this.fz = scanner.nextDouble();
-
-    System.out.println("Enter the moment (N) around the X-axis (Mx):");
-    this.mx = scanner.nextDouble();
-
-    System.out.println("Enter the moment (N) around the Y-axis (My):");
-    this.my = scanner.nextDouble();
-
-    System.out.println("Enter the moment (N) around the Z-axis (Mz):");
-    this.mz = scanner.nextDouble();
-    
-    scanner.nextLine(); 
-    System.out.println("Enter the configuration (e.g., 'Kassette + Doppelschiene'):");
-    this.configuration = scanner.nextLine();
-
-    
-    System.out.println("Enter number of carriages; ");
-    this.numberOfCarriages = scanner.nextInt();
-
-    System.out.println("Enter rail length (mm):");
-    this.railLength = scanner.nextDouble();
-
-    System.out.println("Enter speed (m/s):");
-    this.speed = scanner.nextDouble();
-
-    System.out.println("Enter acceleration (m/s²)");
-    this.acceleration = scanner.nextDouble();
-
-    System.out.println("Enter desired lifetime (km)");
-    this.desiredLifetime = scanner.nextDouble();
-
-    System.out.println("Enter material (e.g., 'Stahl', 'Niro')");
-    this.material = scanner.nextLine();
-
-    System.out.println("Enter environment conditions (e.g., 'light vibrations', 'high vibrations'):");
-    this.conditions = scanner.nextLine();
-
-    System.out.println("Enter additional notes:");
-    this.additionalNotes = scanner.nextLine();
+    this.material = getStringInput(scanner, "Enter the material (e.g., 'Stahl', 'Kupfer', 'Aluminium'):");
+    this.conditions = getStringInput(scanner, "Enter the conditions (e.g., 'Temperatur', 'Feuchtigkeit'):");
+    this.additionalNotes = getStringInput(scanner, "Enter additional notes:");
 
     scanner.close();
 
 }
 
+private int getPositiveIntInput(Scanner scanner, String prompt) {
+    
+    int value = -1;
+    while (value <= 0) {
+        try{
+        System.out.println(prompt);
+        value = scanner.nextInt();
+        if (value <= 0) {
+            System.out.println("Please enter a positive integer.");
+        }
+        } catch (InputMismatchException e) {
+        System.out.println("Please enter a valid integer.");
+        scanner.next(); // ignore invalid input
+        }
+    }
+    return value;   
+}
+
+private double getPositiveDoubleInput(Scanner scanner, String prompt) { //prompt: "Texte"
+    
+    double value = -1;
+    while (value <= 0) {
+        try{
+        System.out.println(prompt);
+        value = scanner.nextDouble();
+        if (value <= 0) {
+            System.out.println("Please enter a positive number.");
+        }
+        } catch (InputMismatchException e) {
+        System.out.println("Please enter a valid number.");
+        scanner.next(); // ignore invalid input
+        }
+    }
+    return value;
+}
+
+private String getStringInput(Scanner scanner, String prompt) { //prompt: "Texte"
+    
+    System.out.println(prompt);
+    return scanner.nextLine();
+}
+
 public void displaySpecifications(){
     System.out.println("\nLinear Guide Specifications:");
     System.out.println("Company: " + company);
-    System.out.println("Adsress: " + address);
+    System.out.println("Address: " + address);
     System.out.println("Department " + department);
     System.out.println("Project: " + project);
     System.out.println("Fx: " + fx + " N, Fy: " + fy + "N, Fz: " + fz + " N");
